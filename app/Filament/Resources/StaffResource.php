@@ -39,10 +39,6 @@ class StaffResource extends Resource
                 ->required()
                 ->label('Posisi'),
 
-            Select::make('assigned_order')
-                ->relationship('order', 'event_type')
-                ->nullable()
-                ->label('Pesanan Ditugaskan'),
         ]);
     }
 

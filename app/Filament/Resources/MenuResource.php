@@ -32,7 +32,6 @@ class MenuResource extends Resource
                     ->description('Isi detail menu makanan/minuman')
                     ->collapsible()
                     ->schema([
-                       
                             
                         Forms\Components\TextInput::make('name')
                             ->required()
