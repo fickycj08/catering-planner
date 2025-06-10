@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,59 +9,60 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f9fafb;
         }
-        
+
         .order-card {
             transition: all 0.3s ease;
             border-radius: 16px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-        
+
         .order-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
-        
+
         .badge {
             border-radius: 9999px;
             padding: 0.25rem 0.75rem;
             font-size: 0.75rem;
             font-weight: 600;
         }
-        
+
         .badge-pending {
             background-color: #FEF3C7;
             color: #92400E;
         }
-        
+
         .badge-in-progress {
             background: linear-gradient(45deg, #3b82f6, #2563eb);
             color: white;
         }
-        
+
         .badge-completed {
             background: linear-gradient(45deg, #10b981, #059669);
             color: white;
         }
-        
+
         .badge-cancelled {
             background: linear-gradient(45deg, #ef4444, #dc2626);
             color: white;
         }
-        
+
         .sidebar-gradient {
             background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
         }
-        
+
         .stats-gradient {
             background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
         }
     </style>
 </head>
+
 <body>
     <div class="flex h-screen bg-gray-50">
         <!-- Sidebar -->
@@ -72,7 +74,8 @@
                 <div class="flex flex-col flex-grow overflow-y-auto">
                     <div class="px-4 py-6">
                         <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-green-600 shadow-md">
+                            <div
+                                class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-green-600 shadow-md">
                                 <i class="fas fa-user-tie text-xl"></i>
                             </div>
                             <div class="ml-3">
@@ -86,11 +89,13 @@
                                 <i class="fas fa-home mr-3"></i>
                                 <span>Dashboard</span>
                             </a>
-                            <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2">
+                            <a href="#"
+                                class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2">
                                 <i class="fas fa-calendar-alt mr-3"></i>
                                 <span>Jadwal</span>
                             </a>
-                            <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2">
+                            <a href="#"
+                                class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2">
                                 <i class="fas fa-clipboard-list mr-3"></i>
                                 <span>Pesanan</span>
                             </a>
@@ -104,7 +109,8 @@
                 <div class="p-4">
                     <form action="{{ route('staff.logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="w-full flex items-center justify-center px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-300">
+                        <button type="submit"
+                            class="w-full flex items-center justify-center px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-300">
                             <i class="fas fa-sign-out-alt mr-2"></i>
                             <span>Logout</span>
                         </button>
@@ -152,7 +158,8 @@
                                 <p class="text-blue-100 mt-1">{{ now()->format('l, d F Y') }}</p>
                             </div>
                             <div class="hidden md:block">
-                                <img src="/api/placeholder/120/120" alt="Chef illustration" class="h-20 w-20 object-cover" />
+                                <img src="/api/placeholder/120/120" alt="Chef illustration"
+                                    class="h-20 w-20 object-cover" />
                             </div>
                         </div>
                     </div>
@@ -174,7 +181,8 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-gray-500 text-sm">Pesanan Aktif</p>
-                                    <h2 class="text-3xl font-bold text-gray-700">{{ $assignedOrders->where('order.status', 'in progress')->count() }}</h2>
+                                    <h2 class="text-3xl font-bold text-gray-700">
+                                        {{ $assignedOrders->where('order.status', 'in progress')->count() }}</h2>
                                 </div>
                                 <div class="bg-blue-100 p-3 rounded-full">
                                     <i class="fas fa-clock text-blue-600 text-xl"></i>
@@ -185,7 +193,8 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-gray-500 text-sm">Pesanan Selesai</p>
-                                    <h2 class="text-3xl font-bold text-gray-700">{{ $assignedOrders->where('order.status', 'completed')->count() }}</h2>
+                                    <h2 class="text-3xl font-bold text-gray-700">
+                                        {{ $assignedOrders->where('order.status', 'completed')->count() }}</h2>
                                 </div>
                                 <div class="bg-green-100 p-3 rounded-full">
                                     <i class="fas fa-check-circle text-green-600 text-xl"></i>
@@ -202,7 +211,7 @@
                                 Pesanan Yang Ditugaskan
                             </h3>
                         </div>
-                        
+
                         <div class="p-6">
                             @if($assignedOrders->isEmpty())
                                 <div class="flex flex-col items-center justify-center py-12">
@@ -215,101 +224,100 @@
                             @else
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     @foreach($assignedOrders as $assignment)
-                                        <div class="order-card bg-white border border-gray-100 rounded-xl overflow-hidden">
-                                            <div class="p-5">
-                                                <div class="flex justify-between items-start">
-                                                    <div>
-                                                        <h3 class="text-lg font-semibold text-gray-800">Order #{{ $assignment->order->id }}</h3>
-                                                        <p class="text-sm text-gray-500 mt-1">{{ $assignment->order->scheduled_date }}</p>
+                                            <div class="order-card bg-white border border-gray-100 rounded-xl overflow-hidden">
+                                                <div class="p-5">
+                                                    <div class="flex justify-between items-start">
+                                                        <div>
+                                                            <h3 class="text-lg font-semibold text-gray-800">Order
+                                                                #{{ $assignment->order->id }}</h3>
+                                                            <p class="text-sm text-gray-500 mt-1">
+                                                                {{ $assignment->order->scheduled_date }}</p>
+                                                        </div>
+                                                        <div>
+                                                            @php
+                                                                $statusClass = '';
+                                                                switch ($assignment->order->status) {
+                                                                    case 'pending':
+                                                                        $statusClass = 'badge-pending';
+                                                                        break;
+                                                                    case 'in progress':
+                                                                        $statusClass = 'badge-in-progress';
+                                                                        break;
+                                                                    case 'completed':
+                                                                        $statusClass = 'badge-completed';
+                                                                        break;
+                                                                    case 'cancelled':
+                                                                        $statusClass = 'badge-cancelled';
+                                                                        break;
+                                                                    default:
+                                                                        $statusClass = 'bg-gray-200 text-gray-800';
+                                                                }
+                                                            @endphp
+                                        <span
+                                                                class="badge {{ $statusClass }}">{{ ucfirst($assignment->order->status) }}</span>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        @php
-                                                            $statusClass = '';
-                                                            switch($assignment->order->status) {
-                                                                case 'pending':
-                                                                    $statusClass = 'badge-pending';
-                                                                    break;
-                                                                case 'in progress':
-                                                                    $statusClass = 'badge-in-progress';
-                                                                    break;
-                                                                case 'completed':
-                                                                    $statusClass = 'badge-completed';
-                                                                    break;
-                                                                case 'cancelled':
-                                                                    $statusClass = 'badge-cancelled';
-                                                                    break;
-                                                                default:
-                                                                    $statusClass = 'bg-gray-200 text-gray-800';
-                                                            }
-                                                        @endphp
-                                                        <span class="badge {{ $statusClass }}">{{ ucfirst($assignment->order->status) }}</span>
+
+                                                    <div class="mt-4 space-y-3">
+                                                        <div class="flex items-start">
+                                                            <i class="fas fa-map-marker-alt text-red-500 mt-1 mr-3"></i>
+                                                            <div>
+                                                                <p class="text-sm text-gray-600 font-medium">Tujuan:</p>
+                                                                <p class="text-gray-800">{{ $assignment->order->tujuan }}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="flex items-start">
+                                                            <i class="fas fa-user-tag text-blue-500 mt-1 mr-3"></i>
+                                                            <div>
+                                                                <p class="text-sm text-gray-600 font-medium">Catatan Tambahan:</p>
+                                                                <p class="text-gray-800">{{ $assignment->order->special_instructions}}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="flex items-start">
+                                                            <i class="fas fa-spinner text-yellow-500 mt-1 mr-3"></i>
+                                                            <div>
+                                                                <p class="text-sm text-gray-600 font-medium">Status Pengerjaan:</p>
+                                                                 <p class="text-gray-800">{{ $assignment->order->scheduled_date}}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                    <div
+                                                        class="mt-5 pt-5 border-t border-gray-100 flex justify-between items-center">
+                                                        <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                                            <i class="fas fa-eye mr-1"></i> Lihat Detail
+                                                        </a>
+
+                                                        <!-- Form Update Status -->
+                                                        <form action="{{ route('staff.orders.updateStatus', $assignment->order) }}"
+                                                            method="POST" class="flex items-center gap-2">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <!-- Tambahkan label "Status" di sini -->
+                                                            <label for="status"
+                                                                class="text-gray-700 text-sm font-medium">Status</label>
+
+                                                            <select id="status" name="status"
+                                                                class="border border-gray-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                                                @foreach(['pending' => 'Pending', 'processing' => 'In Progress', 'completed' => 'Completed', 'cancelled' => 'Cancelled'] as $value => $label)
+                                                                    <option value="{{ $value }}" {{ $assignment->order->status === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                                                @endforeach
+                                                            </select>
+
+                                                            <button type="submit"
+                                                                class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition">
+                                                                Update
+                                                            </button>
+                                                        </form>
+
+                                                    </div>
+
+
                                                 </div>
-                                                
-                                                <div class="mt-4 space-y-3">
-                                                    <div class="flex items-start">
-                                                        <i class="fas fa-map-marker-alt text-red-500 mt-1 mr-3"></i>
-                                                        <div>
-                                                            <p class="text-sm text-gray-600 font-medium">Tujuan:</p>
-                                                            <p class="text-gray-800">{{ $assignment->order->tujuan }}</p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="flex items-start">
-                                                        <i class="fas fa-user-tag text-blue-500 mt-1 mr-3"></i>
-                                                        <div>
-                                                            <p class="text-sm text-gray-600 font-medium">Peran:</p>
-                                                            <p class="text-gray-800">{{ $assignment->role_in_order ?? 'Tidak ditentukan' }}</p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="flex items-start">
-                                                        <i class="fas fa-spinner text-yellow-500 mt-1 mr-3"></i>
-                                                        <div>
-                                                            <p class="text-sm text-gray-600 font-medium">Status Pengerjaan:</p>
-                                                            <p class="text-gray-800">{{ $assignment->status_pengerjaan ?? 'Belum dimulai' }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="mt-5 pt-5 border-t border-gray-100 flex justify-between items-center">
-        <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-            <i class="fas fa-eye mr-1"></i> Lihat Detail
-        </a>
-
-        <!-- Form Update Status -->
-<form action="{{ route('staff.orders.updateStatus', $assignment->order) }}" method="POST" class="flex items-center gap-2">
-    @csrf
-    @method('PATCH')
-
-    <!-- Tambahkan label "Status" di sini -->
-    <label for="status" class="text-gray-700 text-sm font-medium">Status</label>
-
-    <select
-        id="status"
-        name="status"
-        class="border border-gray-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-    >
-        @foreach(['pending'=>'Pending','processing'=>'In Progress','completed'=>'Completed','cancelled'=>'Cancelled'] as $value => $label)
-            <option value="{{ $value }}"
-                {{ $assignment->order->status === $value ? 'selected' : '' }}
-            >{{ $label }}</option>
-        @endforeach
-    </select>
-
-    <button
-        type="submit"
-        class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition"
-    >
-        Update
-    </button>
-</form>
-
-    </div>
-
-                                                
                                             </div>
-                                        </div>
                                     @endforeach
                                 </div>
                             @endif
@@ -335,4 +343,5 @@
         });
     </script>
 </body>
+
 </html>
