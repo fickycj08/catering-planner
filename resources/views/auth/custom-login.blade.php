@@ -243,6 +243,18 @@
                             </button>
                         </form>
 
+                        <br>
+
+                        <!-- Register Link -->
+        <div class="text-center">
+            <p class="text-sm text-gray-600">
+                Belum punya akun? 
+                <a href="{{ route('staff.register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                    Daftar sekarang
+                </a>
+            </p>
+        </div>
+
                        
 
                         <div class="mt-8 text-center text-gray-500 text-xs">
