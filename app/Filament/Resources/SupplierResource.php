@@ -3,41 +3,40 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SupplierResource\Pages;
-use App\Filament\Resources\SupplierResource\RelationManagers;
 use App\Models\Supplier;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Tabs;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\Filter;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
+use Filament\Tables;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SupplierResource extends Resource
 {
     protected static ?string $model = Supplier::class;
+
     protected static ?string $navigationLabel = 'Supplier';
+
     protected static ?int $navigationSort = 5;
+
     protected static ?string $navigationGroup = 'Manajemen Produk';
+
     protected static ?string $recordTitleAttribute = 'name';
+
     protected static int $globalSearchResultsLimit = 5;
 
     public static function getNavigationBadge(): ?string
@@ -85,7 +84,7 @@ class SupplierResource extends Resource
                                                         'kemasan' => 'Kemasan',
                                                         'peralatan' => 'Peralatan',
                                                         'jasa' => 'Jasa',
-                                                        'lainnya' => 'Lainnya'
+                                                        'lainnya' => 'Lainnya',
                                                     ])
                                                     ->default('bahan_baku'),
 
@@ -95,7 +94,7 @@ class SupplierResource extends Resource
                                                     ->options([
                                                         'aktif' => 'Aktif',
                                                         'tidak_aktif' => 'Tidak Aktif',
-                                                        'blacklist' => 'Blacklist'
+                                                        'blacklist' => 'Blacklist',
                                                     ])
                                                     ->default('aktif'),
                                             ]),
@@ -255,7 +254,7 @@ class SupplierResource extends Resource
                 TextColumn::make('address')
                     ->label('Alamat')
                     ->limit(30)
-                    ->tooltip(fn($record) => $record->address)
+                    ->tooltip(fn ($record) => $record->address)
                     ->toggleable(),
 
                 TextColumn::make('city')
@@ -282,7 +281,7 @@ class SupplierResource extends Resource
                         'kemasan' => 'Kemasan',
                         'peralatan' => 'Peralatan',
                         'jasa' => 'Jasa',
-                        'lainnya' => 'Lainnya'
+                        'lainnya' => 'Lainnya',
                     ]),
 
                 SelectFilter::make('status')
@@ -290,7 +289,7 @@ class SupplierResource extends Resource
                     ->options([
                         'aktif' => 'Aktif',
                         'tidak_aktif' => 'Tidak Aktif',
-                        'blacklist' => 'Blacklist'
+                        'blacklist' => 'Blacklist',
                     ]),
 
                 Filter::make('created_at')
@@ -332,7 +331,7 @@ class SupplierResource extends Resource
                                 ->options([
                                     'aktif' => 'Aktif',
                                     'tidak_aktif' => 'Tidak Aktif',
-                                    'blacklist' => 'Blacklist'
+                                    'blacklist' => 'Blacklist',
                                 ])
                                 ->required(),
                         ])
@@ -356,7 +355,7 @@ class SupplierResource extends Resource
     public static function getRelations(): array
     {
         return [
-           
+
         ];
     }
 
@@ -365,12 +364,10 @@ class SupplierResource extends Resource
         return [
             'index' => Pages\ListSuppliers::route('/'),
             'create' => Pages\CreateSupplier::route('/create'),
-           
+
             'edit' => Pages\EditSupplier::route('/{record}/edit'),
         ];
     }
-
-
 
     public static function getGloballySearchableAttributes(): array
     {

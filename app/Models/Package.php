@@ -15,8 +15,8 @@ class Package extends Model
     public function menus(): BelongsToMany
     {
         return $this->belongsToMany(Menu::class, 'package_menu')
-                    ->withPivot(['quantity', 'subtotal'])
-                    ->withTimestamps();
+            ->withPivot(['quantity', 'subtotal'])
+            ->withTimestamps();
     }
 
     protected static function booted()
@@ -29,11 +29,11 @@ class Package extends Model
             $package->updateQuietly(['total_price' => $total]);
         });
     }
-    public static function getOptions()
-{
-    return self::all()->mapWithKeys(function ($package) {
-        return [$package->id => $package->name . ' (Rp ' . number_format($package->total_price, 0, ',', '.') . ')'];
-    });
-}
 
+    public static function getOptions()
+    {
+        return self::all()->mapWithKeys(function ($package) {
+            return [$package->id => $package->name.' (Rp '.number_format($package->total_price, 0, ',', '.').')'];
+        });
+    }
 }

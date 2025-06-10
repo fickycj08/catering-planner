@@ -10,19 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::create('suppliers', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('contact', 50);
-        $table->text('address');
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('suppliers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('contact', 50);
+            $table->text('address');
+            $table->timestamps();
+        });
+    }
 
-public function down()
-{
-    Schema::dropIfExists('suppliers');
-}
-
+    public function down()
+    {
+        Schema::dropIfExists('suppliers');
+    }
 };

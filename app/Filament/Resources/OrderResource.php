@@ -3,54 +3,47 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
-use App\Models\Order;
 use App\Models\Menu;
+use App\Models\Order;
 use App\Models\Package;
 use Filament\Forms;
-use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\View;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Tabs;
-use Filament\Support\Enums\FontWeight;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Illuminate\Support\Str;
+use Filament\Tables\Table;
 use Illuminate\Support\Number;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
-use Carbon\Carbon;
-use Filament\Notifications\Notification;
-use Filament\Infolists;
 
 class OrderResource extends Resource
 {
     protected static ?string $navigationLabel = 'Orders';
+
     protected static ?string $modelLabel = 'Orders';
+
     protected static ?int $navigationSort = 1;
+
     protected static ?string $navigationGroup = 'Manajemen Pesanan';
+
     protected static ?string $recordTitleAttribute = 'id';
 
     public static function getNavigationBadge(): ?string
@@ -134,8 +127,8 @@ class OrderResource extends Resource
 
                                             TextInput::make('custom_event_type')
                                                 ->label('Tipe Acara Kustom')
-                                                ->hidden(fn(Get $get) => $get('event_type') !== 'Lainnya')
-                                                ->required(fn(Get $get) => $get('event_type') === 'Lainnya')
+                                                ->hidden(fn (Get $get) => $get('event_type') !== 'Lainnya')
+                                                ->required(fn (Get $get) => $get('event_type') === 'Lainnya')
                                                 ->placeholder('Masukkan tipe acara custom')
                                                 ->suffixIcon('heroicon-o-pencil'),
 
@@ -187,14 +180,14 @@ class OrderResource extends Resource
                                         ->native(false)
                                         ->hiddenOn('create')
                                         ->columnSpanFull()
-                                        ->suffixIcon(fn(Get $get) => match ($get('status')) {
+                                        ->suffixIcon(fn (Get $get) => match ($get('status')) {
                                             'pending' => 'heroicon-o-clock',
                                             'processing' => 'heroicon-o-arrow-path',
                                             'completed' => 'heroicon-o-check-circle',
                                             'cancelled' => 'heroicon-o-x-circle',
                                             default => 'heroicon-o-question-mark-circle',
                                         })
-                                        ->suffixIconColor(fn(Get $get) => match ($get('status')) {
+                                        ->suffixIconColor(fn (Get $get) => match ($get('status')) {
                                             'pending' => 'warning',
                                             'processing' => 'info',
                                             'completed' => 'success',
@@ -240,10 +233,12 @@ class OrderResource extends Resource
                                                                         ->label('Harga Satuan')
                                                                         ->content(function (Get $get) {
                                                                             $menuId = $get('menu_id');
-                                                                            if (!$menuId)
+                                                                            if (! $menuId) {
                                                                                 return 'Rp 0';
+                                                                            }
                                                                             $price = Menu::find($menuId)?->price ?? 0;
-                                                                            return 'Rp ' . Number::format($price, locale: 'id');
+
+                                                                            return 'Rp '.Number::format($price, locale: 'id');
                                                                         })
                                                                         ->columnSpan(1),
 
@@ -268,7 +263,7 @@ class OrderResource extends Resource
                                                                         ->disabled()
                                                                         ->dehydrated()
                                                                         ->label('Subtotal')
-                                                                        ->formatStateUsing(fn($state) => \Illuminate\Support\Number::format($state ?? 0, locale: 'id'))
+                                                                        ->formatStateUsing(fn ($state) => \Illuminate\Support\Number::format($state ?? 0, locale: 'id'))
                                                                         ->columnSpan(4),
                                                                 ]),
                                                             TextInput::make('special_request')
@@ -277,7 +272,7 @@ class OrderResource extends Resource
                                                                 ->columnSpanFull(),
                                                         ])
                                                         ->label('Menu Satuan')
-                                                        ->itemLabel(fn(array $state): ?string => \App\Models\Menu::find($state['menu_id'])?->name ?? 'Pilih Menu')
+                                                        ->itemLabel(fn (array $state): ?string => \App\Models\Menu::find($state['menu_id'])?->name ?? 'Pilih Menu')
                                                         ->defaultItems(1)
                                                         ->addActionLabel('Tambah Menu'),
                                                 ]),
@@ -307,13 +302,14 @@ class OrderResource extends Resource
                                                                         ->label('Harga Satuan')
                                                                         ->content(function (Get $get) {
                                                                             $packageId = $get('package_id');
-                                                                            if (!$packageId)
+                                                                            if (! $packageId) {
                                                                                 return 'Rp 0';
+                                                                            }
                                                                             $price = Package::find($packageId)?->total_price ?? 0;
-                                                                            return 'Rp ' . Number::format($price, locale: 'id');
+
+                                                                            return 'Rp '.Number::format($price, locale: 'id');
                                                                         })
                                                                         ->columnSpan(1),
-
 
                                                                     TextInput::make('quantity')
                                                                         ->numeric()
@@ -327,21 +323,19 @@ class OrderResource extends Resource
                                                                         })
                                                                         ->suffixIcon('heroicon-o-plus'),
 
-
-
                                                                     TextInput::make('subtotal')
                                                                         ->numeric()
                                                                         ->prefix('Rp')
                                                                         ->disabled()
                                                                         ->dehydrated()
                                                                         ->label('Subtotal')
-                                                                        ->formatStateUsing(fn($state) => Number::format($state ?? 0, locale: 'id'))
+                                                                        ->formatStateUsing(fn ($state) => Number::format($state ?? 0, locale: 'id'))
                                                                         ->columnSpan(4),
                                                                 ]),
                                                         ])
                                                         ->label('Paket Menu')
 
-                                                        ->itemLabel(fn(array $state): ?string => Package::find($state['package_id'])?->name ?? 'Pilih Paket')
+                                                        ->itemLabel(fn (array $state): ?string => Package::find($state['package_id'])?->name ?? 'Pilih Paket')
                                                         ->defaultItems(1)
                                                         ->addActionLabel('Tambah Paket'),
                                                 ]),
@@ -360,29 +354,31 @@ class OrderResource extends Resource
                                                 ->content(function (Get $get) {
                                                     // Mengumpulkan data menu yang dipilih
                                                     $menuItems = collect($get('items') ?? [])
-                                                        ->filter(fn($item) => !empty($item['menu_id']) && !empty($item['quantity']))
+                                                        ->filter(fn ($item) => ! empty($item['menu_id']) && ! empty($item['quantity']))
                                                         ->map(function ($item) {
-                                                        $menu = \App\Models\Menu::find($item['menu_id']);
-                                                        return [
-                                                            'name' => $menu?->name ?? 'Menu tidak ditemukan',
-                                                            'price' => $menu?->price ?? 0,
-                                                            'quantity' => $item['quantity'] ?? 0,
-                                                            'subtotal' => $item['subtotal'] ?? 0,
-                                                        ];
-                                                    });
+                                                            $menu = \App\Models\Menu::find($item['menu_id']);
+
+                                                            return [
+                                                                'name' => $menu?->name ?? 'Menu tidak ditemukan',
+                                                                'price' => $menu?->price ?? 0,
+                                                                'quantity' => $item['quantity'] ?? 0,
+                                                                'subtotal' => $item['subtotal'] ?? 0,
+                                                            ];
+                                                        });
 
                                                     // Mengumpulkan data paket yang dipilih
                                                     $packageItems = collect($get('packages') ?? [])
-                                                        ->filter(fn($package) => !empty($package['package_id']) && !empty($package['quantity']))
+                                                        ->filter(fn ($package) => ! empty($package['package_id']) && ! empty($package['quantity']))
                                                         ->map(function ($package) {
-                                                        $packageModel = \App\Models\Package::find($package['package_id']);
-                                                        return [
-                                                            'name' => $packageModel?->name ?? 'Paket tidak ditemukan',
-                                                            'price' => $packageModel?->total_price ?? 0,
-                                                            'quantity' => $package['quantity'] ?? 0,
-                                                            'subtotal' => $package['subtotal'] ?? 0,
-                                                        ];
-                                                    });
+                                                            $packageModel = \App\Models\Package::find($package['package_id']);
+
+                                                            return [
+                                                                'name' => $packageModel?->name ?? 'Paket tidak ditemukan',
+                                                                'price' => $packageModel?->total_price ?? 0,
+                                                                'quantity' => $package['quantity'] ?? 0,
+                                                                'subtotal' => $package['subtotal'] ?? 0,
+                                                            ];
+                                                        });
 
                                                     // Menghitung total item dan total quantity
                                                     $totalItems = $menuItems->count() + $packageItems->count();
@@ -409,14 +405,13 @@ class OrderResource extends Resource
                                                         // Solusi 1: Jangan gunakan formatStateUsing pada field numeric
                                                         // ->formatStateUsing(fn($state) => \Illuminate\Support\Number::format($state, locale: 'id'))
                                                         ->extraAttributes([
-                                                            'class' => 'font-bold text-lg text-primary-600 dark:text-primary-400'
+                                                            'class' => 'font-bold text-lg text-primary-600 dark:text-primary-400',
                                                         ])
                                                         ->columnSpanFull(),
                                                 ])
                                                 ->columns(1),
                                         ])
                                         ->columns(2),
-
 
                                     Section::make('Ketentuan Pembayaran')
                                         ->description('Informasi metode dan jadwal pembayaran')
@@ -445,8 +440,8 @@ class OrderResource extends Resource
                                                         ->live(onBlur: true)
                                                         ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                                             // Pastikan nilai dikonversi ke integer terlebih dahulu
-                                                            $totalPrice = (int)$get('total_price') ?? 0;
-                                                            $downPayment = (int)$state ?? 0;
+                                                            $totalPrice = (int) $get('total_price') ?? 0;
+                                                            $downPayment = (int) $state ?? 0;
                                                             $set('remaining_payment', max(0, $totalPrice - $downPayment));
                                                         }),
 
@@ -457,9 +452,9 @@ class OrderResource extends Resource
                                                         ->dehydrated()
                                                         ->label('Sisa Pembayaran')
                                                         ->default(0)
-                                                        // Hindari penggunaan formatStateUsing di sini juga
-                                                        // ->formatStateUsing(fn($state) => Number::format($state, locale: 'id'))
-                                                        ,
+                                                    // Hindari penggunaan formatStateUsing di sini juga
+                                                    // ->formatStateUsing(fn($state) => Number::format($state, locale: 'id'))
+                                                    ,
                                                 ])
                                                 ->columns(2),
 
@@ -470,7 +465,6 @@ class OrderResource extends Resource
                                                 ->maxSize(2048)
                                                 ->rules('required', 'file', 'mimes:jpeg,png,pdf', 'max:2048')
                                                 ->helperText('Unggah bukti pembayaran (JPEG, PNG, PDF, maks. 2MB)'),
-
 
                                             RichEditor::make('payment_notes')
                                                 ->label('Catatan Pembayaran')
@@ -524,8 +518,6 @@ class OrderResource extends Resource
             ]);
     }
 
-
-
     public static function table(Table $table): Table
     {
         return $table
@@ -534,7 +526,7 @@ class OrderResource extends Resource
                     ->label('Pelanggan')
                     ->searchable()
                     ->sortable()
-                    ->description(fn($record) => $record->customer->phone ?? '-'),
+                    ->description(fn ($record) => $record->customer->phone ?? '-'),
 
                 TextColumn::make('event_type')
                     ->label('Tipe Acara')
@@ -542,7 +534,7 @@ class OrderResource extends Resource
                     ->color('primary')
                     ->searchable()
                     ->sortable()
-                    ->description(fn($record) => $record->custom_event_type),
+                    ->description(fn ($record) => $record->custom_event_type),
 
                 TextColumn::make('total_price')
                     ->label('Total Harga')
@@ -599,31 +591,31 @@ class OrderResource extends Resource
             ->actions([
                 // Ubah ViewAction menjadi Action custom
                 Tables\Actions\Action::make('view')
-                    ->label('Invoice Pesanan') 
+                    ->label('Invoice Pesanan')
                     ->icon('heroicon-o-eye')
-                    ->url(fn(Order $record) => route('filament.admin.resources.orders.view-invoice', $record))
+                    ->url(fn (Order $record) => route('filament.admin.resources.orders.view-invoice', $record))
                     ->openUrlInNewTab(),
 
                 // Action lainnya
                 Tables\Actions\Action::make('process')
                     ->label('Proses Pesanan')
                     ->icon('heroicon-o-arrow-path')
-                    ->hidden(fn($record) => $record->status !== 'pending')
-                    ->action(fn($record) => $record->markAsProcessing()),
+                    ->hidden(fn ($record) => $record->status !== 'pending')
+                    ->action(fn ($record) => $record->markAsProcessing()),
 
                 Tables\Actions\Action::make('complete')
                     ->label('Tandai Selesai')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->hidden(fn($record) => $record->status === 'completed')
-                    ->action(fn($record) => $record->completeOrder()),
+                    ->hidden(fn ($record) => $record->status === 'completed')
+                    ->action(fn ($record) => $record->completeOrder()),
 
                 Tables\Actions\Action::make('cancel')
                     ->label('Batalkan')
                     ->color('danger')
                     ->icon('heroicon-o-x-circle')
                     ->requiresConfirmation()
-                    ->action(fn($record) => $record->cancelOrder()),
+                    ->action(fn ($record) => $record->cancelOrder()),
 
                 Tables\Actions\EditAction::make()
                     ->icon('heroicon-o-pencil-square'),
@@ -631,9 +623,9 @@ class OrderResource extends Resource
                 Tables\Actions\Action::make('viewPaymentProof')
                     ->label('Bukti Pembayaran')
                     ->icon('heroicon-o-envelope-open') // Anda bisa pilih icon lain sesuai preferensi
-                    ->url(fn(Order $record) => route('filament.admin.resources.orders.view-payment-proof', $record))
+                    ->url(fn (Order $record) => route('filament.admin.resources.orders.view-payment-proof', $record))
                     ->openUrlInNewTab()
-                    ->visible(fn($record) => !empty($record->payment_proof)),  // Hanya tampil jika bukti pembayaran ada
+                    ->visible(fn ($record) => ! empty($record->payment_proof)),  // Hanya tampil jika bukti pembayaran ada
 
             ])
             ->bulkActions([
@@ -643,12 +635,11 @@ class OrderResource extends Resource
                     Tables\Actions\BulkAction::make('markAsCompleted')
                         ->label('Tandai Selesai')
                         ->icon('heroicon-o-check-circle')
-                        ->action(fn($records) => $records->each->update(['status' => 'completed'])),
+                        ->action(fn ($records) => $records->each->update(['status' => 'completed'])),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
     }
-
 
     public static function getPages(): array
     {
@@ -664,16 +655,16 @@ class OrderResource extends Resource
     /**
      * Update subtotal untuk menu atau paket berdasarkan ID dan quantity yang diinput.
      *
-     * @param mixed $id
-     * @param Set $set
-     * @param Get $get
-     * @param string $type ('menu' atau 'package')
+     * @param  mixed  $id
+     * @param  Set  $set
+     * @param  Get  $get
+     * @param  string  $type  ('menu' atau 'package')
      * @return void
      */
     private static function updateSubtotal($id, $set, $get, $type)
     {
         // Cek apakah menu/paket belum diisi atau sudah dihapus
-        if (!$id) {
+        if (! $id) {
             Notification::make()
                 ->warning()
                 ->title('Peringatan')
@@ -681,6 +672,7 @@ class OrderResource extends Resource
                 ->send();
 
             $set('subtotal', 0);
+
             return;
         }
 
@@ -692,8 +684,8 @@ class OrderResource extends Resource
         $subtotal = $price * $quantity;
         $set('subtotal', $subtotal);
 
-        $total = collect($get('../../items'))->sum(fn($item) => $item['subtotal'] ?? 0) +
-            collect($get('../../packages'))->sum(fn($item) => $item['subtotal'] ?? 0);
+        $total = collect($get('../../items'))->sum(fn ($item) => $item['subtotal'] ?? 0) +
+            collect($get('../../packages'))->sum(fn ($item) => $item['subtotal'] ?? 0);
 
         $set('../../total_price', $total);
 

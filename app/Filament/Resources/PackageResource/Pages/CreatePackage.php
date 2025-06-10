@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\PackageResource\Pages;
 
 use App\Filament\Resources\PackageResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreatePackage extends CreateRecord
@@ -13,6 +12,7 @@ class CreatePackage extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['total_price'] = collect($data['menu_data'] ?? [])->sum('subtotal');
+
         return $data;
     }
 
@@ -20,7 +20,7 @@ class CreatePackage extends CreateRecord
     {
         $package = $this->record;
         $menuData = collect($this->data['menu_data'] ?? []);
-        
+
         $menuData->each(function ($item) use ($package) {
             if (isset($item['menu_id']) && isset($item['quantity'])) {
                 $package->menus()->attach($item['menu_id'], [
@@ -29,7 +29,7 @@ class CreatePackage extends CreateRecord
                 ]);
             }
         });
-         // 🔥 Panggil ulang save untuk memicu event `saved()` di model
-         $package->save();
+        // 🔥 Panggil ulang save untuk memicu event `saved()` di model
+        $package->save();
     }
 }

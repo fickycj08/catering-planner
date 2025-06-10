@@ -3,25 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StaffResource\Pages;
-use App\Filament\Resources\StaffResource\RelationManagers;
-use App\Models\Staff;
-use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Table;
 
 class StaffResource extends Resource
 {
     protected static ?string $navigationLabel = 'Karyawan';
-    protected static ?int $navigationSort = 6;
-    protected static ?string $navigationGroup = 'Manajemen Karyawan';
 
+    protected static ?int $navigationSort = 6;
+
+    protected static ?string $navigationGroup = 'Manajemen Karyawan';
 
     public static function form(Form $form): Form
     {

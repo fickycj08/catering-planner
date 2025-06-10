@@ -10,16 +10,16 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::create('subscription_package', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
-        $table->foreignId('package_id')->constrained()->onDelete('cascade');
-        $table->integer('quantity')->default(1); // Tambahkan quantity paket
-        $table->decimal('subtotal', 10, 2)->default(0); // Harga total per paket
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('subscription_package', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
+            $table->foreignId('package_id')->constrained()->onDelete('cascade');
+            $table->integer('quantity')->default(1); // Tambahkan quantity paket
+            $table->decimal('subtotal', 10, 2)->default(0); // Harga total per paket
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

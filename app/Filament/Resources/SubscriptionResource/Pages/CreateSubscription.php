@@ -12,6 +12,7 @@ class CreateSubscription extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['total_price'] = collect($data['packages'] ?? [])->sum('subtotal');
+
         return $data;
     }
 

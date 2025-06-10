@@ -4,7 +4,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\OrderStaff;
 
 class StaffDashboardController extends Controller
@@ -13,7 +12,7 @@ class StaffDashboardController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user->staff) {
+        if (! $user->staff) {
             abort(403, 'Akun Anda belum terhubung dengan data staff.');
         }
 

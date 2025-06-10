@@ -17,11 +17,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Widgets\StatsOverviewWidget\Card;
-use App\Models\Order;
-use App\Models\Customer;
-use App\Models\Menu;
-use App\Models\Inventory;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -42,7 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\StatsOverviewWidget::class, // Tambahkan widget statistik
+                Widgets\StatsOverviewWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -58,5 +53,10 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+    }
+
+    public function canAccessPanel(): bool
+    {
+        return auth()->check() && auth()->user()->isAdmin();
     }
 }

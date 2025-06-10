@@ -31,6 +31,7 @@ class EditPackage extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['total_price'] = collect($data['menu_data'] ?? [])->sum('subtotal');
+
         return $data;
     }
 

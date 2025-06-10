@@ -2,19 +2,19 @@
 
 namespace App\Filament\Widgets;
 
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-use Filament\Widgets\StatsOverviewWidget\Stat;
-use App\Models\Order;
 use App\Models\Customer;
 use App\Models\Menu;
-use App\Models\Inventory;
-use Illuminate\Support\Number;
-use Illuminate\Support\Facades\DB;
+use App\Models\Order;
 use Carbon\Carbon;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Number;
 
 class StatsOverview extends BaseWidget
 {
     protected static ?string $pollingInterval = '30s';
+
     protected static bool $isLazy = true;
 
     protected function getCards(): array
@@ -57,7 +57,6 @@ class StatsOverview extends BaseWidget
                 ->color('warning')
                 ->extraAttributes(['class' => 'animate-pulse']),
 
-
         ];
     }
 
@@ -67,10 +66,9 @@ class StatsOverview extends BaseWidget
             'active' => Order::whereIn('status', ['pending', 'processing'])->count(),
             'completed' => Order::where('status', 'completed')->count(),
             'order_trends' => $this->generateOrderTrendData('processing', now()->subDays(30)),
-            'completion_trends' => $this->generateOrderTrendData('completed', now()->subWeek())
+            'completion_trends' => $this->generateOrderTrendData('completed', now()->subWeek()),
         ];
     }
-
 
     private function calculateRevenue(): array
     {
@@ -85,7 +83,7 @@ class StatsOverview extends BaseWidget
         return [
             'current' => $current,
             'previous' => $previous,
-            'change' => $previous != 0 ? (($current - $previous) / $previous) * 100 : ($current > 0 ? 100 : 0)
+            'change' => $previous != 0 ? (($current - $previous) / $previous) * 100 : ($current > 0 ? 100 : 0),
         ];
     }
 
@@ -208,7 +206,6 @@ class StatsOverview extends BaseWidget
             return $trendText;  // Just return the text without any span when no change
         }
 
-
     }
 
     private function getCompletionRate(array $orderStats): string
@@ -221,7 +218,6 @@ class StatsOverview extends BaseWidget
             $rate
         );
     }
-
 
     private function getRevenueChartData(): array
     {
@@ -249,5 +245,4 @@ class StatsOverview extends BaseWidget
 
         return $chartData;
     }
-
 }

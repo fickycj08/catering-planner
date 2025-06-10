@@ -20,9 +20,9 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
-    public function staff()
-{
-    return $this->hasOne(Staff::class);
-}
 
+    public function staff()
+    {
+        return $this->hasOne(Staff::class);
+    }
 }

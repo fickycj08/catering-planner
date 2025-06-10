@@ -28,6 +28,7 @@ class EditSubscription extends EditRecord
     {
         // 🔥 Hitung ulang total harga sebelum menyimpan perubahan
         $data['total_price'] = collect($data['packages'] ?? [])->sum('subtotal');
+
         return $data;
     }
 

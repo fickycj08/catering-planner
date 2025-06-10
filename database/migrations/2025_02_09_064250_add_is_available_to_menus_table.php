@@ -15,12 +15,11 @@ return new class extends Migration
             $table->boolean('is_available')->default(true);
         });
     }
-    
+
     public function down()
     {
         Schema::table('menus', function (Blueprint $table) {
             $table->dropColumn('is_available');
         });
     }
-    
 };

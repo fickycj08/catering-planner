@@ -25,17 +25,18 @@ class Subscription extends Model
     public function packages(): BelongsToMany
     {
         return $this->belongsToMany(Package::class, 'subscription_package')
-                    ->withPivot('quantity', 'subtotal')
-                    ->withTimestamps();
+            ->withPivot('quantity', 'subtotal')
+            ->withTimestamps();
     }
 
     protected static function booted()
     {
         static::saving(function ($subscription) {
-            $totalPrice = $subscription->packages->sum(fn($pkg) => $pkg->pivot->subtotal);
+            $totalPrice = $subscription->packages->sum(fn ($pkg) => $pkg->pivot->subtotal);
             $subscription->total_price = $totalPrice;
         });
     }
+
     public function recalculateTotalPrice()
     {
         $this->total_price = $this->packages()->sum('subscription_package.subtotal');

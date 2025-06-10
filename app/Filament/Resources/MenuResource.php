@@ -5,23 +5,23 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MenuResource\Pages;
 use App\Models\Menu;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Table;
 
 class MenuResource extends Resource
 {
     protected static ?string $model = Menu::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $navigationLabel = 'Manajemen Menu';
+
     protected static ?string $modelLabel = 'Menu';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -32,7 +32,7 @@ class MenuResource extends Resource
                     ->description('Isi detail menu makanan/minuman')
                     ->collapsible()
                     ->schema([
-                            
+
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255)
@@ -87,7 +87,7 @@ class MenuResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->weight('bold')
-                    ->description(fn ($record) => substr($record->description, 0, 30) . '...'),
+                    ->description(fn ($record) => substr($record->description, 0, 30).'...'),
 
                 Tables\Columns\TextColumn::make('price')
                     ->label('Harga')
@@ -124,7 +124,7 @@ class MenuResource extends Resource
                         'minuman' => 'Minuman',
                         'snack' => 'Snack',
                     ]),
-                    
+
                 Tables\Filters\TernaryFilter::make('is_available')
                     ->label('Ketersediaan'),
             ])
@@ -153,7 +153,6 @@ class MenuResource extends Resource
             //
         ];
     }
-  
 
     public static function getPages(): array
     {

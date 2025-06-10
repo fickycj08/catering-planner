@@ -16,7 +16,6 @@ class Staff extends Model
         'position',
         'user_id',
     ];
-    
 
     public function order()
     {
@@ -26,16 +25,16 @@ class Staff extends Model
     public function orders(): BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Order::class, 'order_staff');
-        
+
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function orderAssignments()
     {
         return $this->hasMany(OrderStaff::class); // model pivot
     }
-    
 }

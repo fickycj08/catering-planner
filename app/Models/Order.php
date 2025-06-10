@@ -35,7 +35,6 @@ class Order extends Model
         $this->saveQuietly(); // Menyimpan tanpa memicu event
     }
 
-
     protected $casts = [
         'total_price' => 'integer',
         'created_at' => 'datetime:Y-m-d H:i:s',
@@ -63,9 +62,13 @@ class Order extends Model
     {
         return $this->belongsToMany(\App\Models\Staff::class, 'order_staff');
     }
-    public function assignedStaff()
-{
-    return $this->hasMany(OrderStaff::class);
-}
 
+    public function assignedStaff()
+    {
+        return $this->hasMany(OrderStaff::class);
+    }
+    public function assignments()
+    {
+        return $this->hasMany(OrderStaff::class);
+    }
 }

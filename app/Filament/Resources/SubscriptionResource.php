@@ -3,31 +3,35 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SubscriptionResource\Pages;
-use App\Models\Subscription;
 use App\Models\Package;
+use App\Models\Subscription;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\ToggleButtons;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class SubscriptionResource extends Resource
 {
     protected static ?string $model = Subscription::class;
+
     protected static ?string $navigationLabel = 'Subscription';
+
     protected static ?int $navigationSort = 2;
+
     protected static ?string $navigationGroup = 'Manajemen Pesanan';
+
     protected static ?string $modelLabel = 'Subscription';
 
     public static function form(Form $form): Form
@@ -48,7 +52,7 @@ class SubscriptionResource extends Resource
                     ])
                     ->columns(2)
                     ->collapsible(),
-                
+
                 Section::make('Detail Langganan')
                     ->schema([
                         Grid::make(3)
@@ -58,14 +62,14 @@ class SubscriptionResource extends Resource
                                     ->label('Tanggal Mulai')
                                     ->native(false)
                                     ->displayFormat('d M Y'),
-                                
+
                                 DatePicker::make('end_date')
                                     ->required()
                                     ->label('Tanggal Berakhir')
                                     ->native(false)
                                     ->displayFormat('d M Y')
                                     ->minDate(fn ($get) => $get('start_date')),
-                                
+
                                 ToggleButtons::make('status')
                                     ->options([
                                         'Aktif' => 'Aktif',
@@ -84,7 +88,7 @@ class SubscriptionResource extends Resource
                             ]),
                     ])
                     ->collapsible(),
-                
+
                 Section::make('Paket Langganan')
                     ->schema([
                         Repeater::make('packages')
@@ -101,7 +105,7 @@ class SubscriptionResource extends Resource
                                             ->afterStateUpdated(function ($state, $set, $get) {
                                                 self::updatePackagePrice($state, $set, $get);
                                             }),
-                                        
+
                                         TextInput::make('quantity')
                                             ->numeric()
                                             ->required()
@@ -112,7 +116,7 @@ class SubscriptionResource extends Resource
                                                 self::updatePackagePrice($get('package_id'), $set, $get);
                                             })
                                             ->label('Jumlah'),
-                                        
+
                                         TextInput::make('subtotal')
                                             ->numeric()
                                             ->disabled()
@@ -135,11 +139,11 @@ class SubscriptionResource extends Resource
                             ->columns(1)
                             ->columnSpanFull()
                             ->itemLabel(fn (array $state): ?string => Package::find($state['package_id'])?->name ?? 'Paket Baru'),
-                        
+
                         Forms\Components\Placeholder::make('total_price_info')
-                            ->content(fn ($get) => 'Total Harga: Rp ' . number_format($get('total_price'), 0, ',', '.'))
+                            ->content(fn ($get) => 'Total Harga: Rp '.number_format($get('total_price'), 0, ',', '.'))
                             ->visible(fn ($get) => $get('total_price') > 0),
-                        
+
                         TextInput::make('total_price')
                             ->numeric()
                             ->disabled()
@@ -159,10 +163,10 @@ class SubscriptionResource extends Resource
         $quantity = $get('quantity') ?? 1;
         $subtotal = $price * $quantity;
         $set('subtotal', $subtotal);
-        
+
         // Update total price
         $packages = $get('../packages') ?? [];
-        $total = collect($packages)->sum(fn($pkg) => $pkg['subtotal'] ?? 0);
+        $total = collect($packages)->sum(fn ($pkg) => $pkg['subtotal'] ?? 0);
         $set('total_price', $total);
     }
 
@@ -174,13 +178,13 @@ class SubscriptionResource extends Resource
                     ->label('Pelanggan')
                     ->searchable()
                     ->sortable(),
-                
+
                 TextColumn::make('total_price')
                     ->money('IDR', locale: 'id')
                     ->label('Total Harga')
                     ->sortable()
                     ->color('success'),
-                
+
                 BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([
@@ -192,22 +196,21 @@ class SubscriptionResource extends Resource
                         'Nonaktif' => 'heroicon-o-x-circle',
                     ])
                     ->iconPosition('after'),
-                
-                    TextColumn::make('start_date')
+
+                TextColumn::make('start_date')
                     ->label('Mulai')
                     ->date('d M Y')
                     ->sortable(),
-                
-                
-                    TextColumn::make('end_date')
+
+                TextColumn::make('end_date')
                     ->label('Berakhir')
                     ->date('d M Y')
                     ->sortable()
                     ->color(function ($record) {
                         // Perbaikan: Gunakan Carbon instance dari casted date
                         return now()->gt($record->end_date) ? 'danger' : 'success';
-                    })
-                
+                    }),
+
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -216,7 +219,7 @@ class SubscriptionResource extends Resource
                         'Nonaktif' => 'Nonaktif',
                     ])
                     ->native(false),
-                
+
                 Tables\Filters\Filter::make('periode_aktif')
                     ->form([
                         DatePicker::make('start_date')
@@ -240,7 +243,7 @@ class SubscriptionResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->iconButton()
                     ->tooltip('Edit'),
-                
+
                 Tables\Actions\Action::make('perpanjang')
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')

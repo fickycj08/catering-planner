@@ -272,11 +272,42 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="mt-5 pt-5 border-t border-gray-100 flex justify-end">
-                                                    <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                                        <i class="fas fa-eye mr-1"></i> Lihat Detail
-                                                    </a>
-                                                </div>
+                                                <div class="mt-5 pt-5 border-t border-gray-100 flex justify-between items-center">
+        <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            <i class="fas fa-eye mr-1"></i> Lihat Detail
+        </a>
+
+        <!-- Form Update Status -->
+<form action="{{ route('staff.orders.updateStatus', $assignment->order) }}" method="POST" class="flex items-center gap-2">
+    @csrf
+    @method('PATCH')
+
+    <!-- Tambahkan label "Status" di sini -->
+    <label for="status" class="text-gray-700 text-sm font-medium">Status</label>
+
+    <select
+        id="status"
+        name="status"
+        class="border border-gray-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+    >
+        @foreach(['pending'=>'Pending','processing'=>'In Progress','completed'=>'Completed','cancelled'=>'Cancelled'] as $value => $label)
+            <option value="{{ $value }}"
+                {{ $assignment->order->status === $value ? 'selected' : '' }}
+            >{{ $label }}</option>
+        @endforeach
+    </select>
+
+    <button
+        type="submit"
+        class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition"
+    >
+        Update
+    </button>
+</form>
+
+    </div>
+
+                                                
                                             </div>
                                         </div>
                                     @endforeach

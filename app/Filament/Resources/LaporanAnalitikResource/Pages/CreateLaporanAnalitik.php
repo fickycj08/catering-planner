@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\LaporanAnalitikResource\Pages;
 
 use App\Filament\Resources\LaporanAnalitikResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateLaporanAnalitik extends CreateRecord

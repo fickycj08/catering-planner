@@ -15,8 +15,7 @@ class Menu extends Model
     public function packages(): BelongsToMany
     {
         return $this->belongsToMany(Package::class, 'package_menu')
-        ->withPivot('quantity')
-        ->withTimestamps();
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SubscriptionResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -21,7 +20,7 @@ class SubscriptionPackagesRelationManager extends RelationManager
                     ->label('Paket')
                     ->options(Package::all()->pluck('name', 'id'))
                     ->required(),
-                    
+
                 Forms\Components\TextInput::make('quantity')
                     ->numeric()
                     ->required(),
@@ -34,9 +33,9 @@ class SubscriptionPackagesRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('package.name')
                     ->label('Nama Paket'),
-                    
+
                 Tables\Columns\TextColumn::make('quantity'),
-                    
+
                 Tables\Columns\TextColumn::make('subtotal')
                     ->money('IDR'),
             ]);
