@@ -6,25 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 
 class OrderStatusController extends Controller
 {
     public function update(Request $request, Order $order)
     {
-        // Validasi input status
-        $data = $request->validate([
-            'status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled'])],
-        ]);
-
-        // Pastikan order ini memang ditugaskan ke staff yang login
-        $staffId = Auth::user()->staff->id;
-        if (! $order->assignments()->where('staff_id', $staffId)->exists()) {
-            abort(403, 'Anda tidak berhak mengubah status order ini.');
+        // 1. Cek apakah staff login posisi Manager
+        $user = auth()->user();
+        if (!$user->staff || $user->staff->position !== 'Manager') {
+            abort(403, 'Anda tidak punya akses untuk mengubah status pesanan.');
         }
 
-        // Update status
-        $order->status = $data['status'];
+        // 2. Validasi input status
+        $request->validate([
+            'status' => [
+                'required',
+                Rule::in(['pending', 'in progress', 'completed', 'cancelled']), // sesuaikan dengan value di DB kamu
+            ],
+        ]);
+
+        // 3. Update status order
+        $order->status = $request->status;
         $order->save();
 
         return back()->with('success', 'Status pesanan berhasil diperbarui.');

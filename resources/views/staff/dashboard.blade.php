@@ -94,11 +94,7 @@
                                 <i class="fas fa-calendar-alt mr-3"></i>
                                 <span>Jadwal</span>
                             </a>
-                            <a href="#"
-                                class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2">
-                                <i class="fas fa-clipboard-list mr-3"></i>
-                                <span>Pesanan</span>
-                            </a>
+                           
                             <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg">
                                 <i class="fas fa-user-cog mr-3"></i>
                                 <span>Profil</span>
@@ -157,10 +153,7 @@
                                 <h1 class="text-2xl font-bold">Selamat Datang, {{ auth()->user()->name }}!</h1>
                                 <p class="text-blue-100 mt-1">{{ now()->format('l, d F Y') }}</p>
                             </div>
-                            <div class="hidden md:block">
-                                <img src="/api/placeholder/120/120" alt="Chef illustration"
-                                    class="h-20 w-20 object-cover" />
-                            </div>
+                           
                         </div>
                     </div>
 
@@ -290,28 +283,35 @@
                                                             <i class="fas fa-eye mr-1"></i> Lihat Detail
                                                         </a>
 
-                                                        <!-- Form Update Status -->
-                                                        <form action="{{ route('staff.orders.updateStatus', $assignment->order) }}"
-                                                            method="POST" class="flex items-center gap-2">
-                                                            @csrf
-                                                            @method('PATCH')
+                                                        @php
+    $isManager = auth()->user()->staff->position === 'Manager';
+@endphp
 
-                                                            <!-- Tambahkan label "Status" di sini -->
-                                                            <label for="status"
-                                                                class="text-gray-700 text-sm font-medium">Status</label>
+@if ($isManager)
+    <!-- Form Update Status hanya untuk Manager -->
+    <form action="{{ route('staff.orders.updateStatus', $assignment->order) }}"
+        method="POST" class="flex items-center gap-2">
+        @csrf
+        @method('PATCH')
 
-                                                            <select id="status" name="status"
-                                                                class="border border-gray-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-                                                                @foreach(['pending' => 'Pending', 'processing' => 'In Progress', 'completed' => 'Completed', 'cancelled' => 'Cancelled'] as $value => $label)
-                                                                    <option value="{{ $value }}" {{ $assignment->order->status === $value ? 'selected' : '' }}>{{ $label }}</option>
-                                                                @endforeach
-                                                            </select>
+        <label for="status" class="text-gray-700 text-sm font-medium">Status</label>
 
-                                                            <button type="submit"
-                                                                class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition">
-                                                                Update
-                                                            </button>
-                                                        </form>
+        <select id="status" name="status"
+            class="border border-gray-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+            @foreach(['pending' => 'Pending', 'in progress' => 'In Progress', 'completed' => 'Completed', 'cancelled' => 'Cancelled'] as $value => $label)
+                <option value="{{ $value }}" {{ $assignment->order->status === $value ? 'selected' : '' }}>{{ $label }}</option>
+            @endforeach
+        </select>
+
+        <button type="submit"
+            class="px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition">
+            Update
+        </button>
+    </form>
+@else
+    <div class="text-sm text-gray-500 italic">Hanya Manager yang dapat mengubah status.</div>
+@endif
+
 
                                                     </div>
 

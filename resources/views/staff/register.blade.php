@@ -113,22 +113,7 @@
                            class="input-field w-full p-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700" required>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">
-                        <i class="fas fa-briefcase field-icon mr-2"></i>Posisi
-                    </label>
-                    <select name="position" class="input-field w-full p-3 border border-gray-300 rounded-lg focus:outline-none text-gray-700" required>
-                        <option value="" disabled selected>Pilih posisi</option>
-                        <option value="Chef">Chef</option>
-                        <option value="Assistant Chef">Assistant Chef</option>
-                        <option value="Kitchen Staff">Kitchen Staff</option>
-                        <option value="Server">Server</option>
-                        <option value="Cashier">Cashier</option>
-                        <option value="Administration">Administration</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Other">Lainnya</option>
-                    </select>
-                </div>
+                
                 
                 <div class="pt-3">
                     <button type="submit" class="submit-btn w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">

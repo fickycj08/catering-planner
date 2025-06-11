@@ -10,6 +10,8 @@ class Staff extends Model
 {
     use HasFactory;
 
+    protected $table = 'staff'; // <--- tambahkan baris ini!
+
     protected $fillable = [
         'name',
         'phone',

@@ -56,7 +56,7 @@ class StaffAuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'required|string|max:20',
-            'position' => 'required|string|max:255',
+            
         ]);
 
         try {

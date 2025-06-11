@@ -9,6 +9,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
+
 
 class StaffResource extends Resource
 {
@@ -30,9 +32,20 @@ class StaffResource extends Resource
                 ->label('Nomor HP')
                 ->tel(),
 
-            TextInput::make('position')
-                ->required()
-                ->label('Posisi'),
+            Select::make('position')
+    ->label('Posisi')
+    ->options([
+        'Chef' => 'Chef',
+        'Assistant Chef' => 'Assistant Chef',
+        'Kitchen Staff' => 'Kitchen Staff',
+        'Server' => 'Server',
+        'Cashier' => 'Cashier',
+        'Administration' => 'Administration',
+        'Manager' => 'Manager',
+        'Other' => 'Lainnya',
+    ])
+    ->required(),
+
 
         ]);
     }
