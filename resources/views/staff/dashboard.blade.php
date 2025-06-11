@@ -85,12 +85,13 @@
                             </div>
                         </div>
                         <nav class="flex-1 space-y-1">
-                            <a href="#" class="flex items-center px-4 py-3 text-white bg-white/20 rounded-lg mb-2">
+                            <a href="{{ route('staff.dashboard') }}"
+                                class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2 {{ request()->routeIs('staff.dashboard') ? 'bg-white/20' : '' }}">
                                 <i class="fas fa-home mr-3"></i>
                                 <span>Dashboard</span>
                             </a>
-                            <a href="#"
-                                class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2">
+                            <a href="{{ route('staff.schedule') }}"
+                                class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg mb-2 {{ request()->routeIs('staff.schedule') ? 'bg-white/20' : '' }}">
                                 <i class="fas fa-calendar-alt mr-3"></i>
                                 <span>Jadwal</span>
                             </a>
