@@ -34,6 +34,10 @@ Route::post('/staff/register', [StaffAuthController::class, 'register']);
 
 Route::middleware('auth')->get('/staff/dashboard', [StaffDashboardController::class, 'index'])->name('staff.dashboard');
 
+Route::middleware('auth')
+    ->get('/staff/jadwal', [StaffDashboardController::class, 'schedule'])
+    ->name('staff.schedule');
+
 Route::middleware(['auth', 'prevent_staff'])->prefix('staff')->group(function () {
     // Route untuk update status order
     Route::patch('orders/{order}/status', [OrderStatusController::class, 'update'])
