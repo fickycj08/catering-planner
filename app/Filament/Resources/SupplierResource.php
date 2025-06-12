@@ -345,8 +345,31 @@ class SupplierResource extends Resource
                     Tables\Actions\BulkAction::make('exportSelected')
                         ->label('Export Selected')
                         ->icon('heroicon-o-document-arrow-down')
-                        ->action(function (Collection $records): void {
-                            // Logika untuk export data
+                        ->form([
+                            Select::make('format')
+                                ->label('Export Format')
+                                ->options([
+                                    'xlsx' => 'Excel',
+                                    'pdf' => 'PDF',
+                                ])
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data) {
+                            if ($data['format'] === 'pdf') {
+                                $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('exports.suppliers', [
+                                    'suppliers' => $records,
+                                ]);
+
+                                return response()->streamDownload(
+                                    fn () => print($pdf->output()),
+                                    'suppliers.pdf'
+                                );
+                            }
+
+                            return \Maatwebsite\Excel\Facades\Excel::download(
+                                new \App\Exports\SuppliersExport($records),
+                                'suppliers.xlsx'
+                            );
                         }),
                 ]),
             ]);
