@@ -9,7 +9,7 @@ use App\Http\Controllers\Staff\OrderStatusController;
 Route::redirect('/', '/custom-login');
 
 Route::get('/custom-login', [\App\Http\Controllers\Auth\CustomLoginController::class, 'showLoginForm'])->name('custom.login');
-Route::post('/custom-login', [\App\Http\Controllers\Auth\CustomLoginController::class, 'login']);
+Route::post('/custom-login', [\App\Http\Controllers\Auth\CustomLoginController::class, 'login'])->name('custom.login.submit');
 
 
 
