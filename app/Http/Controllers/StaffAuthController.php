@@ -76,37 +76,18 @@ class StaffAuthController extends Controller
                 'user_id' => $user->id,
             ]);
 
+            Log::info('Registering staff', $request->all());
+            Log::info('User created', ['id' => $user->id]);
+            Log::info('Staff created', ['id' => $staff->id]);
+
             // 3. Login langsung
             Auth::login($user);
-
-            return redirect('/staff/dashboard');
-
         } catch (\Exception $e) {
-            // Kalau ada error, tampilkan detailnya
-            dd($e->getMessage());
+            Log::error('Staff registration failed', ['message' => $e->getMessage()]);
+            return back()->withErrors([
+                'register' => 'Registration failed. Please try again.',
+            ])->withInput();
         }
-
-        // 1. Buat akun user
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'staff',
-        ]);
-
-        // 2. Buat data staff
-        Staff::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'position' => $request->position,
-            'user_id' => $user->id,
-        ]);
-        Log::info('Registering staff', $request->all());
-        Log::info('User created', ['id' => $user->id]);
-        Log::info('Staff created', ['id' => $staff->id]);
-
-        // 3. Login langsung
-        Auth::login($user);
 
         return redirect('/staff/dashboard');
 
