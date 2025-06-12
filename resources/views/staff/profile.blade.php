@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal Staff Catering</title>
+    <title>Profil Staff</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6/index.global.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         body {
@@ -71,12 +70,12 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex items-center md:hidden">
-                            <button id="menu-toggle" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none">
                                 <i class="fas fa-bars text-xl"></i>
                             </button>
                         </div>
                         <div class="flex items-center">
-                            <span class="text-gray-700 hidden md:block">Jadwal Staff</span>
+                            <span class="text-gray-700 hidden md:block">Profil Staff</span>
                         </div>
                         <div class="flex items-center">
                             <div class="ml-3 relative md:hidden">
@@ -93,61 +92,57 @@
             </div>
             <!-- Main Content -->
             <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6">
-                <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg p-6">
-                    <form method="GET" class="flex flex-wrap gap-2 mb-4">
-                        <select name="status" class="border rounded px-3 py-2">
-                            <option value="">Semua Status</option>
-                            <option value="pending" {{ ($filters['status'] ?? '') === 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="processing" {{ ($filters['status'] ?? '') === 'processing' ? 'selected' : '' }}>Processing</option>
-                            <option value="completed" {{ ($filters['status'] ?? '') === 'completed' ? 'selected' : '' }}>Completed</option>
-                            <option value="cancelled" {{ ($filters['status'] ?? '') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                        </select>
-                        <input type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" class="border rounded px-3 py-2" />
-                        <input type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" class="border rounded px-3 py-2" />
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Filter</button>
-                    </form>
-                    <div id="calendar"></div>
-                    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-                        <div class="bg-white p-6 rounded-xl w-96">
-                            <h2 id="modalTitle" class="text-lg font-semibold mb-2"></h2>
-                            <p class="mb-1"><span class="font-semibold">Customer:</span> <span id="modalCustomer"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Status:</span> <span id="modalStatus"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Tanggal:</span> <span id="modalDate"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Tujuan:</span> <span id="modalTujuan"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Event:</span> <span id="modalEventType"></span></p>
-                            <button id="closeModal" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full">Tutup</button>
+                <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+                    @if(session('success'))
+                        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
+                            {{ session('success') }}
                         </div>
-                    </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
+                            <ul class="list-disc pl-5 text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{ route('staff.profile.update') }}" method="POST" class="space-y-4">
+                        @csrf
+                        @method('PUT')
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                            <input type="text" name="name" value="{{ old('name', $staff->name) }}" class="w-full border-gray-300 rounded-lg p-2" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Telepon</label>
+                            <input type="text" name="phone" value="{{ old('phone', $staff->phone) }}" class="w-full border-gray-300 rounded-lg p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Posisi</label>
+                            <input type="text" name="position" value="{{ old('position', $staff->position) }}" class="w-full border-gray-300 rounded-lg p-2">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                                <input type="password" name="password" class="w-full border-gray-300 rounded-lg p-2" autocomplete="new-password">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password</label>
+                                <input type="password" name="password_confirmation" class="w-full border-gray-300 rounded-lg p-2" autocomplete="new-password">
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
+                        </div>
+                    </form>
                 </div>
             </main>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6/index.global.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-                initialView: 'dayGridMonth',
-                events: @json($events),
-                eventClick: function(info) {
-                    document.getElementById('modalTitle').textContent = info.event.title;
-                    document.getElementById('modalCustomer').textContent = info.event.extendedProps.customer || '-';
-                    document.getElementById('modalStatus').textContent = info.event.extendedProps.status;
-                    document.getElementById('modalDate').textContent = info.event.startStr;
-                    document.getElementById('modalTujuan').textContent = info.event.extendedProps.tujuan || '-';
-                    document.getElementById('modalEventType').textContent = info.event.extendedProps.event_type || '-';
-                    document.getElementById('eventModal').classList.remove('hidden');
-                }
-            });
-            calendar.render();
-
-            document.getElementById('closeModal').addEventListener('click', function() {
-                document.getElementById('eventModal').classList.add('hidden');
-            });
-        });
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const menuButton = document.querySelector('#menu-toggle');
+            const menuButton = document.querySelector('button');
             if (menuButton) {
                 menuButton.addEventListener('click', () => {
                     const sidebar = document.querySelector('.md\\:flex.md\\:flex-shrink-0');

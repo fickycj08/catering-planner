@@ -2,10 +2,13 @@
 
 // app/Http/Controllers/StaffDashboardController.php
 
+<?php
+
 namespace App\Http\Controllers;
 
 use App\Models\OrderStaff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash; // import Hash dari main
 
 class StaffDashboardController extends Controller
 {
@@ -62,5 +65,48 @@ class StaffDashboardController extends Controller
             'events' => $events,
             'filters' => $request->only(['status', 'start_date', 'end_date']),
         ]);
+    }
+
+    public function showProfile()
+    {
+        $user = auth()->user();
+        if (!$user->staff) {
+            abort(403, 'Akun Anda belum terhubung dengan data staff.');
+        }
+
+        $staff = $user->staff;
+
+        return view('staff.profile', compact('staff'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+        if (!$user->staff) {
+            abort(403, 'Akun Anda belum terhubung dengan data staff.');
+        }
+
+        $staff = $user->staff;
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'position' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
+
+        $staff->update([
+            'name' => $validated['name'],
+            'phone' => $validated['phone'] ?? $staff->phone,
+            'position' => $validated['position'] ?? $staff->position,
+        ]);
+
+        $user->name = $validated['name'];
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+        $user->save();
+
+        return back()->with('success', 'Profil berhasil diperbarui.');
     }
 }
