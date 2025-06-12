@@ -16,9 +16,6 @@ Route::post('/custom-login', [\App\Http\Controllers\Auth\CustomLoginController::
 Route::get('/staff/login', [StaffAuthController::class, 'showLoginForm'])->name('staff.login');
 Route::post('/staff/login', [StaffAuthController::class, 'login']);
 Route::post('/staff/logout', [StaffAuthController::class, 'logout'])->name('staff.logout');
-Route::middleware('auth')->get('/staff/dashboard', function () {
-    return view('staff.dashboard');
-})->name('staff.dashboard');
 Route::get('/staff/register', [StaffAuthController::class, 'showRegisterForm'])->name('staff.register');
 Route::post('/staff/register', [StaffAuthController::class, 'register'])->name('staff.register');
 
