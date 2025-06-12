@@ -20,6 +20,9 @@ manajemen logistik.
 pengelolaan supplier.
 6. Laporan dan Analitik:
 ▪ Laporan penjualan, analitik menu, pelanggan, serta kinerja staf
+## Analytics Page
+Halaman "Analytics" di panel admin menampilkan ringkasan pendapatan, jumlah pesanan, dan pelanggan baru. Gunakan tombol "Export Excel" atau "Export PDF" untuk mengunduh data bulanan.
+
 
 ### Susunan Tim
 
