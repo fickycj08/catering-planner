@@ -29,6 +29,13 @@ Route::middleware('auth')
     ->get('/staff/jadwal', [StaffDashboardController::class, 'schedule'])
     ->name('staff.schedule');
 
+Route::middleware('auth')
+    ->get('/staff/profile', [StaffDashboardController::class, 'showProfile'])
+    ->name('staff.profile');
+Route::middleware('auth')
+    ->match(['put', 'patch'], '/staff/profile', [StaffDashboardController::class, 'updateProfile'])
+    ->name('staff.profile.update');
+
 Route::middleware(['auth', 'prevent_staff'])->prefix('staff')->group(function () {
     // Route untuk update status order
     Route::patch('orders/{order}/status', [OrderStatusController::class, 'update'])
