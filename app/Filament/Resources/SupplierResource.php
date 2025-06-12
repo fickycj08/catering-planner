@@ -24,6 +24,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\SupplierResource\RelationManagers\InventoriesRelationManager;
 
 class SupplierResource extends Resource
 {
@@ -355,7 +356,7 @@ class SupplierResource extends Resource
     public static function getRelations(): array
     {
         return [
-
+            RelationManagers\InventoriesRelationManager::class,
         ];
     }
 
