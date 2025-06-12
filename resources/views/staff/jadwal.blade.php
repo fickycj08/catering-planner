@@ -94,7 +94,30 @@
             <!-- Main Content -->
             <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6">
                 <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+                    <form method="GET" class="flex flex-wrap gap-2 mb-4">
+                        <select name="status" class="border rounded px-3 py-2">
+                            <option value="">Semua Status</option>
+                            <option value="pending" {{ ($filters['status'] ?? '') === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="processing" {{ ($filters['status'] ?? '') === 'processing' ? 'selected' : '' }}>Processing</option>
+                            <option value="completed" {{ ($filters['status'] ?? '') === 'completed' ? 'selected' : '' }}>Completed</option>
+                            <option value="cancelled" {{ ($filters['status'] ?? '') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        </select>
+                        <input type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" class="border rounded px-3 py-2" />
+                        <input type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" class="border rounded px-3 py-2" />
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Filter</button>
+                    </form>
                     <div id="calendar"></div>
+                    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                        <div class="bg-white p-6 rounded-xl w-96">
+                            <h2 id="modalTitle" class="text-lg font-semibold mb-2"></h2>
+                            <p class="mb-1"><span class="font-semibold">Customer:</span> <span id="modalCustomer"></span></p>
+                            <p class="mb-1"><span class="font-semibold">Status:</span> <span id="modalStatus"></span></p>
+                            <p class="mb-1"><span class="font-semibold">Tanggal:</span> <span id="modalDate"></span></p>
+                            <p class="mb-1"><span class="font-semibold">Tujuan:</span> <span id="modalTujuan"></span></p>
+                            <p class="mb-1"><span class="font-semibold">Event:</span> <span id="modalEventType"></span></p>
+                            <button id="closeModal" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full">Tutup</button>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -104,9 +127,22 @@
         document.addEventListener('DOMContentLoaded', function () {
             var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
                 initialView: 'dayGridMonth',
-                events: @json($events)
+                events: @json($events),
+                eventClick: function(info) {
+                    document.getElementById('modalTitle').textContent = info.event.title;
+                    document.getElementById('modalCustomer').textContent = info.event.extendedProps.customer || '-';
+                    document.getElementById('modalStatus').textContent = info.event.extendedProps.status;
+                    document.getElementById('modalDate').textContent = info.event.startStr;
+                    document.getElementById('modalTujuan').textContent = info.event.extendedProps.tujuan || '-';
+                    document.getElementById('modalEventType').textContent = info.event.extendedProps.event_type || '-';
+                    document.getElementById('eventModal').classList.remove('hidden');
+                }
             });
             calendar.render();
+
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('eventModal').classList.add('hidden');
+            });
         });
     </script>
     <script>
