@@ -695,4 +695,3 @@ class OrderResource extends Resource
         }
     }
 }
-\Log::info(request()->all());
