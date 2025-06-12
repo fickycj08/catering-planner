@@ -96,7 +96,7 @@
                                 <span>Jadwal</span>
                             </a>
                            
-                            <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg">
+                            <a href="{{ route('staff.profile') }}" class="flex items-center px-4 py-3 text-white hover:bg-white/10 rounded-lg {{ request()->routeIs('staff.profile') ? 'bg-white/20' : '' }}">
                                 <i class="fas fa-user-cog mr-3"></i>
                                 <span>Profil</span>
                             </a>
