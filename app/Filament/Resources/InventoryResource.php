@@ -3,99 +3,67 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InventoryResource\Pages;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 
 class InventoryResource extends Resource
 {
+    // 1. Jangan tampilkan di sidebar
+    protected static bool $shouldRegisterNavigation = false;
+
+    // (opsional) tetap simpan label dsb jika nanti mau di-undo
     protected static ?string $navigationLabel = 'Inventaris';
-
     protected static ?int $navigationSort = 4;
-
     protected static ?string $navigationGroup = 'Manajemen Produk';
 
+    // 2. Tolak semua permission
+    public static function canViewAny(): bool
+    {
+        return false;
+    }
+
+    public static function canView(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
+
+    // 3. Kosongkan form (tidak ada field)
     public static function form(Form $form): Form
     {
-        return $form->schema([
-            TextInput::make('item_name')
-                ->required()
-                ->label('Nama Item'),
-
-            TextInput::make('quantity')
-                ->required()
-                ->label('Jumlah')
-                ->numeric()
-                ->minValue(0),
-
-            TextInput::make('unit')
-                ->required()
-                ->label('Satuan'),
-
-            Select::make('supplier_id')
-                ->relationship('supplier', 'name')
-                ->nullable()
-                ->label('Supplier'),
-        ]);
+        return $form->schema([]);
     }
 
+    // 3. Kosongkan table (tanpa kolom, tanpa action)
     public static function table(Table $table): Table
     {
-        return $table->columns([
-            TextColumn::make('item_name')
-                ->label('Nama Item')
-                ->sortable()
-                ->searchable(),
-
-            TextColumn::make('quantity')
-                ->label('Jumlah')
-                ->sortable(),
-
-            TextColumn::make('unit')
-                ->label('Satuan')
-                ->sortable(),
-
-            TextColumn::make('supplier.name')
-                ->label('Supplier')
-                ->sortable()
-                ->placeholder('Tanpa Supplier'),
-
-            TextColumn::make('last_updated')
-                ->label('Terakhir Diperbarui')
-                ->dateTime()
-                ->sortable(),
-        ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+        return $table
+            ->columns([])
+            ->actions([])
+            ->bulkActions([]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
+    // 4. Hilangkan semua page routes
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInventories::route('/'),
-            'create' => Pages\CreateInventory::route('/create'),
-            'edit' => Pages\EditInventory::route('/{record}/edit'),
+            // Index, Create, Edit di-disable dengan mengosongkan routes
         ];
     }
 }

@@ -107,57 +107,68 @@
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Filter</button>
                     </form>
                     <div id="calendar"></div>
-                    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-                        <div class="bg-white p-6 rounded-xl w-96">
-                            <h2 id="modalTitle" class="text-lg font-semibold mb-2"></h2>
-                            <p class="mb-1"><span class="font-semibold">Customer:</span> <span id="modalCustomer"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Status:</span> <span id="modalStatus"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Tanggal:</span> <span id="modalDate"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Tujuan:</span> <span id="modalTujuan"></span></p>
-                            <p class="mb-1"><span class="font-semibold">Event:</span> <span id="modalEventType"></span></p>
-                            <button id="closeModal" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full">Tutup</button>
-                        </div>
-                    </div>
+                    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-xl w-96 relative">
+        <h2 id="modalTitle" class="text-lg font-semibold mb-2"></h2>
+        <p class="mb-1"><span class="font-semibold">Customer:</span> <span id="modalCustomer"></span></p>
+        <p class="mb-1"><span class="font-semibold">Status:</span> <span id="modalStatus"></span></p>
+        <p class="mb-1"><span class="font-semibold">Tanggal:</span> <span id="modalDate"></span></p>
+        <p class="mb-1"><span class="font-semibold">Tujuan:</span> <span id="modalTujuan"></span></p>
+        <p class="mb-1"><span class="font-semibold">Event:</span> <span id="modalEventType"></span></p>
+        <button id="closeModal" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full">Tutup</button>
+    </div>
+</div>
                 </div>
             </main>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6/index.global.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-                initialView: 'dayGridMonth',
-                events: @json($events),
-                eventClick: function(info) {
-                    document.getElementById('modalTitle').textContent = info.event.title;
-                    document.getElementById('modalCustomer').textContent = info.event.extendedProps.customer || '-';
-                    document.getElementById('modalStatus').textContent = info.event.extendedProps.status;
-                    document.getElementById('modalDate').textContent = info.event.startStr;
-                    document.getElementById('modalTujuan').textContent = info.event.extendedProps.tujuan || '-';
-                    document.getElementById('modalEventType').textContent = info.event.extendedProps.event_type || '-';
-                    document.getElementById('eventModal').classList.remove('hidden');
-                }
-            });
-            calendar.render();
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Inisialisasi calendar
+    var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        initialView: 'dayGridMonth',
+        events: @json($events),
+        eventClick: function(info) {
+            document.getElementById('modalTitle').textContent = info.event.title;
+            document.getElementById('modalCustomer').textContent = info.event.extendedProps.customer || '-';
+            document.getElementById('modalStatus').textContent = info.event.extendedProps.status;
+            document.getElementById('modalDate').textContent = info.event.startStr;
+            document.getElementById('modalTujuan').textContent = info.event.extendedProps.tujuan || '-';
+            document.getElementById('modalEventType').textContent = info.event.extendedProps.event_type || '-';
+            document.getElementById('eventModal').classList.remove('hidden');
+        }
+    });
+    calendar.render();
 
-            document.getElementById('closeModal').addEventListener('click', function() {
-                document.getElementById('eventModal').classList.add('hidden');
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuButton = document.querySelector('#menu-toggle');
-            if (menuButton) {
-                menuButton.addEventListener('click', () => {
-                    const sidebar = document.querySelector('.md\\:flex.md\\:flex-shrink-0');
-                    if (sidebar) {
-                        sidebar.classList.toggle('hidden');
-                        sidebar.classList.toggle('block');
-                    }
-                });
-            }
-        });
-    </script>
+    // MODAL CLOSE: tombol tutup & klik luar modal
+    const eventModal = document.getElementById('eventModal');
+    const closeBtn = document.getElementById('closeModal');
+
+    // Tutup jika klik tombol
+    closeBtn.addEventListener('click', function() {
+        eventModal.classList.add('hidden');
+    });
+
+    // Tutup jika klik di luar modal (background)
+    eventModal.addEventListener('click', function(e) {
+        if (e.target === eventModal) {
+            eventModal.classList.add('hidden');
+        }
+    });
+
+    // Responsive sidebar
+    const menuButton = document.querySelector('#menu-toggle');
+    if (menuButton) {
+        menuButton.addEventListener('click', () => {
+            const sidebar = document.querySelector('.md\\:flex.md\\:flex-shrink-0');
+            if (sidebar) {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('block');
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>

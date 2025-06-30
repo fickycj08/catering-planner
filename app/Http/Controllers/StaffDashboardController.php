@@ -2,7 +2,7 @@
 
 // app/Http/Controllers/StaffDashboardController.php
 
-<?php
+
 
 namespace App\Http\Controllers;
 

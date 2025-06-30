@@ -20,9 +20,9 @@ class OrderStatusController extends Controller
         // 2. Validasi input status
         $request->validate([
             'status' => [
-                'required',
-                Rule::in(['pending', 'in progress', 'completed', 'cancelled']), // sesuaikan dengan value di DB kamu
-            ],
+        'required',
+        Rule::in(['Pending', 'Processing', 'Completed', 'Cancelled']),
+    ],
         ]);
 
         // 3. Update status order

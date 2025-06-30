@@ -3,23 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Staff</title>
+    <title>Profil Staff - Catering Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f9fafb;
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background-color: #f0f2f5; /* Warna latar belakang sedikit lebih lembut */
         }
         .sidebar-gradient {
-            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            background: linear-gradient(160deg, #10b981 0%, #3b82f6 100%);
+        }
+        .btn-gradient {
+            background: linear-gradient(to right, #10b981, #2563eb);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        /* Animasi untuk sidebar mobile */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
         }
     </style>
 </head>
-<body>
-    <div class="flex h-screen bg-gray-50">
-        <!-- Sidebar -->
+<body class="antialiased">
+    <div class="relative min-h-screen md:flex">
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
+
         <div class="hidden md:flex md:flex-shrink-0">
             <div class="flex flex-col w-64 sidebar-gradient shadow-xl">
                 <div class="flex items-center justify-center h-20 bg-white/10">
@@ -63,96 +78,144 @@
                 </div>
             </div>
         </div>
-        <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Top Navbar -->
-            <div class="bg-white shadow-sm z-10">
+
+        <div class="flex-1 flex flex-col">
+            <header class="bg-white shadow-sm sticky top-0 z-10">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex items-center md:hidden">
-                            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-                                <i class="fas fa-bars text-xl"></i>
-                            </button>
-                        </div>
+                    <div class="flex justify-between items-center h-16">
+                        <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-gray-800">
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
+                        <h2 class="text-xl font-semibold text-gray-800 hidden md:block">Profil Saya</h2>
                         <div class="flex items-center">
-                            <span class="text-gray-700 hidden md:block">Profil Staff</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="ml-3 relative md:hidden">
-                                <form action="{{ route('staff.logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="p-1 text-red-500">
-                                        <i class="fas fa-sign-out-alt"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                           </div>
                     </div>
                 </div>
-            </div>
-            <!-- Main Content -->
-            <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6">
-                <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+            </header>
+            
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div class="max-w-4xl mx-auto">
                     @if(session('success'))
-                        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
-                            {{ session('success') }}
+                        <div class="mb-6 p-4 flex items-center bg-green-100 text-green-800 rounded-lg shadow-sm">
+                            <i class="fas fa-check-circle mr-3 text-green-600"></i>
+                            <span>{{ session('success') }}</span>
                         </div>
                     @endif
                     @if ($errors->any())
-                        <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
-                            <ul class="list-disc pl-5 text-sm">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                        <div class="mb-6 p-4 bg-red-100 text-red-800 rounded-lg shadow-sm">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-red-600"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium">Terdapat error pada input Anda:</h3>
+                                    <ul class="mt-2 list-disc pl-5 text-sm">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     @endif
-                    <form action="{{ route('staff.profile.update') }}" method="POST" class="space-y-4">
+
+                    <form action="{{ route('staff.profile.update') }}" method="POST" class="space-y-8">
                         @csrf
                         @method('PUT')
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                            <input type="text" name="name" value="{{ old('name', $staff->name) }}" class="w-full border-gray-300 rounded-lg p-2" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Telepon</label>
-                            <input type="text" name="phone" value="{{ old('phone', $staff->phone) }}" class="w-full border-gray-300 rounded-lg p-2">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Posisi</label>
-                            <input type="text" name="position" value="{{ old('position', $staff->position) }}" class="w-full border-gray-300 rounded-lg p-2">
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
-                                <input type="password" name="password" class="w-full border-gray-300 rounded-lg p-2" autocomplete="new-password">
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                            <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Informasi Akun</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-user text-gray-400"></i>
+                                        </div>
+                                        <input type="text" id="name" name="name" value="{{ old('name', $staff->name) }}" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-phone text-gray-400"></i>
+                                        </div>
+                                        <input type="text" id="phone" name="phone" value="{{ old('phone', $staff->phone) }}" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="position" class="block text-sm font-medium text-gray-700 mb-1">Posisi</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-briefcase text-gray-400"></i>
+                                        </div>
+                                        <input type="text" id="position" name="position" value="{{ old('position', $staff->position) }}" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed" readonly>
+
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password</label>
-                                <input type="password" name="password_confirmation" class="w-full border-gray-300 rounded-lg p-2" autocomplete="new-password">
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                            <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Ubah Password</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                                     <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-lock text-gray-400"></i>
+                                        </div>
+                                        <input type="password" id="password" name="password" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="new-password" placeholder="Kosongkan jika tidak diubah">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="fas fa-lock text-gray-400"></i>
+                                        </div>
+                                        <input type="password" id="password_confirmation" name="password_confirmation" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="new-password">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
+
+                        <div class="flex justify-end">
+                            <button type="submit" class="px-8 py-3 btn-gradient text-white font-bold rounded-lg shadow-md hover:shadow-lg">
+                                Simpan Perubahan
+                            </button>
                         </div>
                     </form>
                 </div>
             </main>
         </div>
     </div>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuButton = document.querySelector('button');
-            if (menuButton) {
-                menuButton.addEventListener('click', () => {
-                    const sidebar = document.querySelector('.md\\:flex.md\\:flex-shrink-0');
-                    if (sidebar) {
-                        sidebar.classList.toggle('hidden');
-                        sidebar.classList.toggle('block');
-                    }
-                });
-            }
-        });
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuButton = document.getElementById('mobile-menu-button');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        if (menuButton) {
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleSidebar();
+            });
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', () => {
+                toggleSidebar();
+            });
+        }
+    });
     </script>
 </body>
 </html>

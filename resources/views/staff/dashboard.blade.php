@@ -272,7 +272,7 @@
                                                         <div class="flex items-start">
                                                             <i class="fas fa-spinner text-yellow-500 mt-1 mr-3"></i>
                                                             <div>
-                                                                <p class="text-sm text-gray-600 font-medium">Status Pengerjaan:</p>
+                                                                <p class="text-sm text-gray-600 font-medium">Scheduled Date:</p>
                                                                  <p class="text-gray-800">{{ $assignment->order->scheduled_date}}</p>
                                                             </div>
                                                         </div>
