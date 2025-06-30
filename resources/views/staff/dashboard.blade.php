@@ -176,7 +176,7 @@
                                 <div>
                                     <p class="text-gray-500 text-sm">Pesanan Aktif</p>
                                     <h2 class="text-3xl font-bold text-gray-700">
-                                        {{ $assignedOrders->where('order.status', 'in progress')->count() }}</h2>
+                                        {{ $assignedOrders->where('order.status', 'Processing')->count() }}</h2>
                                 </div>
                                 <div class="bg-blue-100 p-3 rounded-full">
                                     <i class="fas fa-clock text-blue-600 text-xl"></i>
@@ -188,7 +188,7 @@
                                 <div>
                                     <p class="text-gray-500 text-sm">Pesanan Selesai</p>
                                     <h2 class="text-3xl font-bold text-gray-700">
-                                        {{ $assignedOrders->where('order.status', 'completed')->count() }}</h2>
+                                        {{ $assignedOrders->where('order.status', 'Completed')->count() }}</h2>
                                 </div>
                                 <div class="bg-green-100 p-3 rounded-full">
                                     <i class="fas fa-check-circle text-green-600 text-xl"></i>
@@ -231,16 +231,16 @@
                                                             @php
                                                                 $statusClass = '';
                                                                 switch ($assignment->order->status) {
-                                                                    case 'pending':
+                                                                    case 'Pending':
                                                                         $statusClass = 'badge-pending';
                                                                         break;
-                                                                    case 'in progress':
+                                                                    case 'Processing':
                                                                         $statusClass = 'badge-in-progress';
                                                                         break;
-                                                                    case 'completed':
+                                                                    case 'Completed':
                                                                         $statusClass = 'badge-completed';
                                                                         break;
-                                                                    case 'cancelled':
+                                                                    case 'Cancelled':
                                                                         $statusClass = 'badge-cancelled';
                                                                         break;
                                                                     default:
@@ -299,7 +299,7 @@
 
         <select id="status" name="status"
             class="border border-gray-200 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-            @foreach(['pending' => 'Pending', 'in progress' => 'In Progress', 'completed' => 'Completed', 'cancelled' => 'Cancelled'] as $value => $label)
+            @foreach(['Pending' => 'Pending', 'Processing' => 'Processing', 'Completed' => 'Completed', 'Cancelled' => 'Cancelled'] as $value => $label)
                 <option value="{{ $value }}" {{ $assignment->order->status === $value ? 'selected' : '' }}>{{ $label }}</option>
             @endforeach
         </select>
