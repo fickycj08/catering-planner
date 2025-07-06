@@ -86,61 +86,14 @@ class Analytics extends Page
 
     public function exportPdf()
     {
-        $lines = ['Analytics Summary'];
-        foreach ($this->monthlyData as $row) {
-            $lines[] = sprintf(
-                '%s - Revenue: %s, Orders: %d, Customers: %d',
-                $row['month'],
-                $row['revenue'],
-                $row['orders'],
-                $row['customers'],
-            );
-        }
-
-        $pdf = $this->generatePdf($lines);
-
-        return response($pdf, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="analytics.pdf"',
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('exports.analytics', [
+            'monthlyData' => $this->monthlyData,
         ]);
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            'analytics.pdf'
+        );
     }
 
-    private function generatePdf(array $lines): string
-    {
-        $y = 750;
-        $content = "BT\n/F1 12 Tf\n";
-        foreach ($lines as $line) {
-            $content .= "1 0 0 1 50 $y Tm ($line) Tj\n";
-            $y -= 16;
-        }
-        $content .= "ET";
-        $len = strlen($content);
-
-        $objects = [];
-        $objects[] = "<< /Type /Catalog /Pages 2 0 R >>";
-        $objects[] = "<< /Type /Pages /Kids [3 0 R] /Count 1 >>";
-        $objects[] = "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>";
-        $objects[] = "<< /Length $len >>\nstream\n$content\nendstream";
-        $objects[] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>";
-
-        $pdf = "%PDF-1.4\n";
-        $offsets = [];
-        $offset = strlen($pdf);
-        foreach ($objects as $i => $obj) {
-            $offsets[] = $offset;
-            $pdf .= ($i + 1) . " 0 obj\n" . $obj . "\nendobj\n";
-            $offset = strlen($pdf);
-        }
-
-        $xref = "xref\n0 " . (count($objects) + 1) . "\n0000000000 65535 f \n";
-        foreach ($offsets as $o) {
-            $xref .= sprintf("%010d 00000 n \n", $o);
-        }
-
-        $pdf .= $xref;
-        $pdf .= "trailer\n<< /Root 1 0 R /Size " . (count($objects) + 1) . " >>\n";
-        $pdf .= "startxref\n" . strlen($pdf) . "\n%%EOF";
-
-        return $pdf;
-    }
 }
